@@ -1,0 +1,19 @@
+{
+  "name": "sw",
+  "version": "1.0.0",
+  "description": "Photo gallery",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "photo",
+    "gallery"
+  ],
+  "author": "Pat",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.12.2",
+    "mongodb": "^1.4.35"
+  }
+}
