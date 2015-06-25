@@ -59,16 +59,30 @@ MongoClient.connect(url, function(err, db) {
 //Express 
 
 
+// //Get list of albums w/cover photo
+// app.get('/', function( req, res ){
+// 	getAlbums(function (galleryList){
+// 		console.log(galleryList);
+// 		res.send( 'this is from inside express call' +JSON.stringify( galleryList, '\t' ) );
+// 	});
+// 	
+// })
+
+
 //Get list of albums w/cover photo
 app.get('/', function( req, res ){
-	getAlbums(function (galleryList){
-		console.log(galleryList);
-		res.send( 'this is from inside express call' + galleryList );
-	});
+	galleryList = old_getAlbums( )
+	console.log( galleryList );
+	res.send( 'this is from inside express from old_getAlbums ' +JSON.stringify( galleryList, '\t' ) );
 	
-})
-
-
+} )
+	
+	
+	
+	
+	
+	
+	
 
 
 
@@ -88,6 +102,8 @@ app.get('/', function( req, res ){
 
 	
 	
+ 
+ 
 	
 	// Albums section
 	// Albums section
@@ -134,25 +150,24 @@ app.get('/', function( req, res ){
 	//Get a list of all albums with cover photo
 	 function old_getAlbums( ){
 	 
-		galleryList = galleries.find( { }, { name: 1, coverPhoto: 1 } ).toArray( function( err, galleryList ) {
+		galleries.find( { }, { name: 1, coverPhoto: 1 } ).toArray( function( err, galleryList ) {
 			
 			if( ! err  ){
 				if( galleryList.count < 1 ){
 					console.log( 'Currently there are no albums in the gallery.' );
 				}
 			
-			
-				galleryList.forEach( function( galleryList ) {
-					console.log( galleryList );
-					
-					return JSON.stringify( galleryList, '\t' );
+				galleryList.forEach( function( galleryItem ) {
+					console.log( galleryItem );	
 				})
 				
 			
 			}else{
 				console.log( 'Get albums error.' );
 				return false;
-			}		
+			}
+			
+		return galleryList ;		
 		})
 	 };
 			
