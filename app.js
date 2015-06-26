@@ -7,9 +7,9 @@ var express = require('express')
 var app = express()
 
 
-app.get('/', function (req, res) {
-  res.send('Hello seewa World! cccccc')
-})
+// // app.get('/', function (req, res) {
+// //   res.send('Hello seewa World! cccccc')
+// // })
 
 
 var server = app.listen(3000, function () {
@@ -31,6 +31,7 @@ var MongoClient = require('mongodb').MongoClient,
 
 
 	
+	
 // Connection URL & DB
 var url = 'mongodb://localhost:27017/seewa';
 
@@ -46,6 +47,24 @@ MongoClient.connect(url, function(err, db) {
 	
 	
 	
+//Express
+//Express 
+
+
+//Get list of albums w/cover photo url for home page
+app.get('/', function( req, res ){
+	 getAlbums( function( galleryCallback ){
+	res.send( JSON.stringify( galleryCallback, '\t' ) );	
+	 });
+} )	
+	
+
+
+
+
+
+
+
 
 // Albums section
 // Albums section
@@ -56,73 +75,33 @@ var galleries = db.collection( 'galleries' );
 
 
 
-// 	TODO: Make js return properly to browser.
 //Get a list of all albums with cover photo
-	 function getAlbums( ){
-	 
-		galleryList = galleries.find( { }, { name: 1, coverPhoto: 1 } 
-				).toArray( function( err, galleryList ) {
+	function getAlbums( galleryCallback ) {
+		galleries.find( { }, { name: 1, coverPhoto: 1 } ).toArray( function( err, galleryResults ) {
 			
 			if( ! err  ){
-				if( galleryList.count < 1 ){
-					console.log( 'Currently there are no albums.');
-				}
-			
-			
-				galleryList.forEach( function( galleryList ) {
-					console.log( galleryList.name )
-				
-					return JSON.stringify( galleryList, '\t' );
-// 					return galleryList;
-				})
-				
-			
-			}else{
-				console.log( 'Get albums error.' );
-				return false;
-			}		
-		})
-	 };
-			
-	getAlbums();
-
-
-
-
-
-	
-
-	
- 
-//Get a list of all albums with cover photo
- function getAlbums( ){
-	 
-		galleryList = galleries.find( { }, { name: 1, coverPhoto: 1 } ).toArray( function( err, galleryList ) {
-			
-			if( ! err  ){
-				if(galleryList.length < 1){
+				if( galleryResults.count < 1 ){
 					console.log( 'Currently there are no albums in the gallery.' );
 				}
 				
-				galleryList.forEach( function( gallery ) {
-					
-					console.log( gallery );
-					
-					return gallery;
-				});
+			console.log( galleryResults );
+			galleryCallback( galleryResults )
+				
 			}else{
 				console.log( 'Get albums error.' );
-				return false;
-			}
-		})	
-	 };
-// 	getAlbums();
-
-
+				return galleryCallback( false );
+			}	
+		})
+		return galleryCallback;
+	};
+			
+	
+	
 		
 	
-	
-	//Get one selected album by ID
+	 
+	 
+	//Function: Get one selected album by ID
 	function getOneAlbum ( albumId ){
 		
 			galleries.findOne( { '_id': albumID }, function( err, album)  {
@@ -134,8 +113,13 @@ var galleries = db.collection( 'galleries' );
 					//console.log( 'Error getting selected album' );
 					return false;
 				}
-		});	
+		});
+		
 	};
+	
+	//getOneAlbum( albumID );
+
+	
 	
 	//getOneAlbum( albumID );
 

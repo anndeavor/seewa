@@ -1,5 +1,3 @@
-
-
 //require underscore lib
 var _ = require("underscore");
 
@@ -14,8 +12,6 @@ app.get('/', function (req, res) {
   res.send('Hello seewa World! dasfadafa')
 })
 */
-
-
 
 
 
@@ -59,33 +55,15 @@ MongoClient.connect(url, function(err, db) {
 //Express 
 
 
-// //Get list of albums w/cover photo
-// app.get('/', function( req, res ){
-// 	getAlbums(function (galleryList){
-// 		console.log(galleryList);
-// 		res.send( 'this is from inside express call' +JSON.stringify( galleryList, '\t' ) );
-// 	});
-// 	
-// })
-
-
-//Get list of albums w/cover photo
+//Get list of albums w/cover photo url for home page
 app.get('/', function( req, res ){
-	galleryList = old_getAlbums( )
-	console.log( galleryList );
-	res.send( 'this is from inside express from old_getAlbums ' +JSON.stringify( galleryList, '\t' ) );
-	
+	 getAlbums( function( galleryCallback ){
+	res.send( JSON.stringify( galleryCallback, '\t' ) );	
+	 });
 } )
 	
 	
 	
-	
-	
-	
-	
-
-
-
 
 //Express: Get photos and comments for one album 
  /*  app.get('/album/', function( req, res, next,  photoURL ){
@@ -112,70 +90,32 @@ app.get('/', function( req, res ){
 	var galleries = db.collection( 'galleries' );
 	
 	
+	
+	
 
-// 	TODO: Make js return properly to browser.
 	//Get a list of all albums with cover photo
-	 function getAlbums( callback ){
-		
-		galleries.find( { }, { name: 1, coverPhoto: 1 } ).toArray( 
-			function( err, galleryList ) {
-			
-				if( ! err  ){
-					if( galleryList.count < 1 ){
-						console.log( 'Currently there are no albums in the gallery.' );
-					}
-			
-			
-					/*galleryList.forEach( function( galleryList ) {
-						console.log( galleryList );
-						
-						return JSON.stringify( galleryList, '\t' );
-					})*/
-					callback(JSON.stringify( galleryList, '\t' ));
-			
-				}else{
-					console.log( 'Get albums error.' + err );
-					callback(false);
-				}		
-			}
-		);
-		
-	 };
-			
-	//getAlbums();
-	
-	
-	
-// 	TODO: Make js return properly to browser.
-	//Get a list of all albums with cover photo
-	 function old_getAlbums( ){
-	 
-		galleries.find( { }, { name: 1, coverPhoto: 1 } ).toArray( function( err, galleryList ) {
+	function getAlbums( galleryCallback ) {
+		galleries.find( { }, { name: 1, coverPhoto: 1 } ).toArray( function( err, galleryResults ) {
 			
 			if( ! err  ){
-				if( galleryList.count < 1 ){
+				if( galleryResults.count < 1 ){
 					console.log( 'Currently there are no albums in the gallery.' );
 				}
-			
-				galleryList.forEach( function( galleryItem ) {
-					console.log( galleryItem );	
-				})
 				
-			
+			console.log( galleryResults );
+			galleryCallback( galleryResults )
+				
 			}else{
 				console.log( 'Get albums error.' );
-				return false;
-			}
-			
-		return galleryList ;		
+				return galleryCallback( false );
+			}	
 		})
-	 };
+		return galleryCallback;
+	};
 			
-	//getAlbums();
 	
 	
-
-	
+		
 	
 	 
 	 
